@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAC Active Membership Nomination Survey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d4a3a;
+            --primary-light: #1a7a5e;
+            --gold: #c9a227;
+            --gold-light: #e8c547;
+            --cream: #faf8f3;
+            --dark: #1a1a1a;
+            --text: #2d2d2d;
+            --text-light: #666;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .header-bar {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a3d30 100%);
+            color: white;
+            padding: 20px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+        }
+
+        .header-title span {
+            color: var(--gold);
+            margin-left: 10px;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar-container {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 100px;
+        }
+
+        /* Registration Section */
+        .registration-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .registration-section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .registration-section .subtitle {
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .required {
+            color: #e53935;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13,74,58,0.1);
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(13,74,58,0.3);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Survey Hidden Initially */
+        .survey-content {
+            display: none;
+        }
+
+        .survey-content.active {
+            display: block;
+        }
+
+        /* Pillar Cards */
+        .pillar-card {
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .pillar-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 30px;
+            position: relative;
+        }
+
+        .pillar-number {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 4rem;
+            font-weight: 700;
+            opacity: 0.15;
+            font-family: 'Amiri', serif;
+        }
+
+        .pillar-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .pillar-title {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .pillar-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .pillar-meta {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .pillar-body {
+            padding: 30px;
+        }
+
+        .pillar-description {
+            background: var(--cream);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--gold);
+            line-height: 1.7;
+        }
+
+        .behaviors-section h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .behavior-item {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .behavior-item::before {
+            content: '✦';
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* Survey Section */
+        .survey-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px dashed #e0e0e0;
+        }
+
+        .survey-section h4 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            color: white;
+            font-size: 1rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            flex: 1;
+            min-width: 70px;
+        }
+
+        .rating-option input { display: none; }
+
+        .rating-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .rating-option label:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .rating-option input:checked + label {
+            background: var(--gold);
+            border-color: white;
+        }
+
+        .rating-num {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .rating-label {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .reflection-textarea {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            min-height: 100px;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .reflection-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13,74,58,0.1);
+        }
+
+        .reflection-textarea::placeholder {
+            color: #aaa;
+        }
+
+        /* Commitment Section */
+        .commitment-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .commitment-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .commitment-section p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .commitment-textarea {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .commitment-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Submit Section */
+        .submit-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a3d30 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .submit-section h3 {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .submit-section p {
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        .submit-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .submit-btn {
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .submit-btn.primary {
+            background: var(--gold);
+            color: var(--primary);
+        }
+
+        .submit-btn.primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .submit-btn.secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .submit-btn.secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Completion Screen */
+        .completion-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .completion-screen.active {
+            display: block;
+        }
+
+        .completion-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .completion-screen h2 {
+            color: var(--primary);
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .completion-screen p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .header-content { justify-content: center; text-align: center; }
+            .pillar-meta { flex-direction: column; gap: 10px; }
+            .rating-scale { justify-content: center; }
+            .rating-option { min-width: 55px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <div class="header-content">
+            <div class="header-title">Active Membership Survey <span>عضوية فاعلة</span></div>
+            <div class="progress-info">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">0% Complete</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Registration Section -->
+        <div class="registration-section" id="registrationSection">
+            <h2>📋 Nominee Information</h2>
+            <p class="subtitle">Please provide your details before starting the survey</p>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="nomineeName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" id="nomineeEmail" required placeholder="your.email@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Chapter <span class="required">*</span></label>
+                    <input type="text" id="nomineeChapter" required placeholder="e.g., Toronto, Ottawa, Calgary">
+                </div>
+                <div class="form-group">
+                    <label>Current Role in MAC</label>
+                    <input type="text" id="nomineeRole" placeholder="e.g., Volunteer, Committee Member">
+                </div>
+                <div class="form-group">
+                    <label>Years with MAC <span class="required">*</span></label>
+                    <select id="nomineeYears" required>
+                        <option value="">Select...</option>
+                        <option value="<1">Less than 1 year</option>
+                        <option value="1-2">1-2 years</option>
+                        <option value="3-5">3-5 years</option>
+                        <option value="5-10">5-10 years</option>
+                        <option value="10+">10+ years</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Session Date</label>
+                    <input type="date" id="sessionDate" value="">
+                </div>
+            </div>
+            
+            <button class="start-btn" id="startBtn" onclick="startSurvey()">Begin Survey →</button>
+        </div>
+
+        <!-- Survey Content -->
+        <div class="survey-content" id="surveyContent">
+            
+            <!-- Pillar 1 -->
+            <div class="pillar-card" data-pillar="1">
+                <div class="pillar-header">
+                    <span class="pillar-number">01</span>
+                    <div class="pillar-badge">Pillar One</div>
+                    <h2 class="pillar-title">The Understanding</h2>
+                    <div class="pillar-arabic">الفهم</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Comprehensiveness</span>
+                        <span><strong>Manifestation:</strong> Align with our ideology</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        True understanding means seeing the complete picture of our Da'wah—its methodology, goals, and boundaries. It's the foundation upon which all other pillars rest.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Framing all plans within MAC's mission and Da'wah methodology</div>
+                        <div class="behavior-item">Rejecting popular but ideologically misaligned activities</div>
+                        <div class="behavior-item">Explaining the "why" behind decisions</div>
+                        <div class="behavior-item">Correcting drift toward club or personality-based work</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"How well do I understand MAC's mission and methodology, and how does this understanding guide my decisions?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p1" id="p1_1" value="1"><label for="p1_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p1" id="p1_2" value="2"><label for="p1_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p1" id="p1_3" value="3"><label for="p1_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p1" id="p1_4" value="4"><label for="p1_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p1" id="p1_5" value="5"><label for="p1_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p1_text" placeholder="Share a specific example of how you've applied this understanding in your MAC involvement..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="pillar-card" data-pillar="2">
+                <div class="pillar-header">
+                    <span class="pillar-number">02</span>
+                    <div class="pillar-badge">Pillar Two</div>
+                    <h2 class="pillar-title">The Sincerity</h2>
+                    <div class="pillar-arabic">الإخلاص</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> The Ultimate Goal</span>
+                        <span><strong>Manifestation:</strong> Al-Jundiyyah (soldiership)</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Sincerity is the soul of our work. It means acting for Allah's pleasure alone, embracing the role of a soldier in this Da'wah regardless of recognition or reward.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Accepting national direction regardless of visibility or credit</div>
+                        <div class="behavior-item">Stepping in personally when gaps exist</div>
+                        <div class="behavior-item">Avoiding self-promotion and redirecting praise to the mission</div>
+                        <div class="behavior-item">Prioritizing Da'wah needs over personal comfort</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"When I serve in MAC, is my motivation truly for Allah's sake? Am I comfortable with work that goes unnoticed?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p2" id="p2_1" value="1"><label for="p2_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p2" id="p2_2" value="2"><label for="p2_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p2" id="p2_3" value="3"><label for="p2_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p2" id="p2_4" value="4"><label for="p2_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p2" id="p2_5" value="5"><label for="p2_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p2_text" placeholder="Reflect on a time when you served without expectation of recognition..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="pillar-card" data-pillar="3">
+                <div class="pillar-header">
+                    <span class="pillar-number">03</span>
+                    <div class="pillar-badge">Pillar Three</div>
+                    <h2 class="pillar-title">The Work</h2>
+                    <div class="pillar-arabic">العمل</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Concern & Hope</span>
+                        <span><strong>Manifestation:</strong> Activism, persistence, hope</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Work is the bridge between intention and impact. It requires both deep concern for the mission and unwavering hope in Allah's promise, manifesting through persistent action.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Maintaining momentum despite low morale or turnout</div>
+                        <div class="behavior-item">Relentless follow-up on commitments and reports</div>
+                        <div class="behavior-item">Planning proactively, not reactively</div>
+                        <div class="behavior-item">Communicating hope grounded in Allah's promise</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"Do I take initiative in MAC's work? How do I respond when facing obstacles or discouragement?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p3" id="p3_1" value="1"><label for="p3_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p3" id="p3_2" value="2"><label for="p3_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p3" id="p3_3" value="3"><label for="p3_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p3" id="p3_4" value="4"><label for="p3_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p3" id="p3_5" value="5"><label for="p3_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p3_text" placeholder="Describe a project or initiative where you demonstrated persistent effort..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="pillar-card" data-pillar="4">
+                <div class="pillar-header">
+                    <span class="pillar-number">04</span>
+                    <div class="pillar-badge">Pillar Four</div>
+                    <h2 class="pillar-title">The Jihad</h2>
+                    <div class="pillar-arabic">الجهاد</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> The Efforts</span>
+                        <span><strong>Manifestation:</strong> Striving, exhaustion, no limits</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Jihad in this context means the internal struggle to push beyond comfort zones, to strive with excellence, and to give our utmost for the sake of Allah's cause.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Pushing beyond minimal compliance</div>
+                        <div class="behavior-item">Personally investing time and emotional energy in difficult phases</div>
+                        <div class="behavior-item">Refusing comfort-driven ceilings on effort</div>
+                        <div class="behavior-item">Modeling resilience under pressure</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"When have I pushed myself beyond what was comfortable for MAC's mission? What limits do I place on my effort?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p4" id="p4_1" value="1"><label for="p4_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p4" id="p4_2" value="2"><label for="p4_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p4" id="p4_3" value="3"><label for="p4_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p4" id="p4_4" value="4"><label for="p4_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p4" id="p4_5" value="5"><label for="p4_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p4_text" placeholder="Share an experience where you went above and beyond in your service..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 5 -->
+            <div class="pillar-card" data-pillar="5">
+                <div class="pillar-header">
+                    <span class="pillar-number">05</span>
+                    <div class="pillar-badge">Pillar Five</div>
+                    <h2 class="pillar-title">The Sacrifice</h2>
+                    <div class="pillar-arabic">التضحية</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Generosity</span>
+                        <span><strong>Manifestation:</strong> Readiness, not volunteering</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Sacrifice goes beyond volunteering—it's a state of readiness to give whatever is needed, whenever it's needed, without calculation or hesitation.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Giving time and availability beyond formal requirements</div>
+                        <div class="behavior-item">Accepting inconvenience for chapter continuity</div>
+                        <div class="behavior-item">Calling members to step up with moral clarity</div>
+                        <div class="behavior-item">Prioritizing mission over personal schedule when needed</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"What have I sacrificed—time, comfort, resources—for MAC's mission? Am I ready to give more when called upon?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p5" id="p5_1" value="1"><label for="p5_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p5" id="p5_2" value="2"><label for="p5_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p5" id="p5_3" value="3"><label for="p5_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p5" id="p5_4" value="4"><label for="p5_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p5" id="p5_5" value="5"><label for="p5_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p5_text" placeholder="Reflect on a sacrifice you made for the organization and what it meant to you..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 6 -->
+            <div class="pillar-card" data-pillar="6">
+                <div class="pillar-header">
+                    <span class="pillar-number">06</span>
+                    <div class="pillar-badge">Pillar Six</div>
+                    <h2 class="pillar-title">The Obedience</h2>
+                    <div class="pillar-arabic">الطاعة</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Insight</span>
+                        <span><strong>Manifestation:</strong> Ease & difficulty, love & hate – commitment</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        True obedience stems from insight—understanding that organizational discipline serves a higher purpose. It means following through in both easy and difficult times.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Implementing national decisions faithfully even when disagreeing</div>
+                        <div class="behavior-item">Using proper channels for feedback</div>
+                        <div class="behavior-item">Enforcing policy, system, and branding compliance</div>
+                        <div class="behavior-item">Teaching discipline as part of Tarbiyah</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"How do I respond when organizational decisions differ from my personal preferences? Do I follow proper channels?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p6" id="p6_1" value="1"><label for="p6_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p6" id="p6_2" value="2"><label for="p6_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p6" id="p6_3" value="3"><label for="p6_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p6" id="p6_4" value="4"><label for="p6_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p6" id="p6_5" value="5"><label for="p6_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p6_text" placeholder="Share how you've handled a situation where you disagreed but still followed organizational direction..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 7 -->
+            <div class="pillar-card" data-pillar="7">
+                <div class="pillar-header">
+                    <span class="pillar-number">07</span>
+                    <div class="pillar-badge">Pillar Seven</div>
+                    <h2 class="pillar-title">The Steadfastness</h2>
+                    <div class="pillar-arabic">الثبات</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> The Reward</span>
+                        <span><strong>Manifestation:</strong> Patience, continuity, all conditions</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Steadfastness means remaining firm on the path regardless of circumstances—maintaining commitment through criticism, hardship, and changing conditions.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Maintaining consistent leadership presence over time</div>
+                        <div class="behavior-item">Not disengaging during criticism or hardship</div>
+                        <div class="behavior-item">Protecting long-term vision from emotional reactions</div>
+                        <div class="behavior-item">Building systems that outlast individuals</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"How long have I been consistently involved with MAC? How do I respond during difficult seasons?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p7" id="p7_1" value="1"><label for="p7_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p7" id="p7_2" value="2"><label for="p7_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p7" id="p7_3" value="3"><label for="p7_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p7" id="p7_4" value="4"><label for="p7_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p7" id="p7_5" value="5"><label for="p7_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p7_text" placeholder="Describe a challenging period in your MAC involvement and how you persevered..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 8 -->
+            <div class="pillar-card" data-pillar="8">
+                <div class="pillar-header">
+                    <span class="pillar-number">08</span>
+                    <div class="pillar-badge">Pillar Eight</div>
+                    <h2 class="pillar-title">The Tajarrud</h2>
+                    <div class="pillar-arabic">التجرد</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Loyalty</span>
+                        <span><strong>Manifestation:</strong> Relationship determinants</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Tajarrud means detachment from personal interests—letting principles, not personalities or friendships, guide our organizational decisions and relationships.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Deciding based on principles, not friendships or pressure groups</div>
+                        <div class="behavior-item">Separating personal relationships from organizational judgment</div>
+                        <div class="behavior-item">Preventing favoritism and informal power centers</div>
+                        <div class="behavior-item">Modeling loyalty to the Da'wah above personalities</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"Am I able to separate personal relationships from organizational matters? Do I advocate for principles over people?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p8" id="p8_1" value="1"><label for="p8_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p8" id="p8_2" value="2"><label for="p8_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p8" id="p8_3" value="3"><label for="p8_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p8" id="p8_4" value="4"><label for="p8_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p8" id="p8_5" value="5"><label for="p8_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p8_text" placeholder="Reflect on a time when you prioritized principles over personal preferences or relationships..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 9 -->
+            <div class="pillar-card" data-pillar="9">
+                <div class="pillar-header">
+                    <span class="pillar-number">09</span>
+                    <div class="pillar-badge">Pillar Nine</div>
+                    <h2 class="pillar-title">The Brotherhood</h2>
+                    <div class="pillar-arabic">الأخوة</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Strength</span>
+                        <span><strong>Manifestation:</strong> Solidarity and love</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Brotherhood is our source of collective strength—a culture of genuine care, mutual support, and shared responsibility that binds us together in purpose.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Building a culture of care, correction, and shared responsibility</div>
+                        <div class="behavior-item">Addressing conflict early with wisdom and fairness</div>
+                        <div class="behavior-item">Defending members from injustice while correcting mistakes</div>
+                        <div class="behavior-item">Promoting collective success over individual prominence</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"How do I contribute to the culture of brotherhood? Do I support others' success as much as my own?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p9" id="p9_1" value="1"><label for="p9_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p9" id="p9_2" value="2"><label for="p9_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p9" id="p9_3" value="3"><label for="p9_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p9" id="p9_4" value="4"><label for="p9_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p9" id="p9_5" value="5"><label for="p9_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p9_text" placeholder="Share an example of how you've supported or been supported by the MAC brotherhood..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillar 10 -->
+            <div class="pillar-card" data-pillar="10">
+                <div class="pillar-header">
+                    <span class="pillar-number">10</span>
+                    <div class="pillar-badge">Pillar Ten</div>
+                    <h2 class="pillar-title">The Trust</h2>
+                    <div class="pillar-arabic">الثقة</div>
+                    <div class="pillar-meta">
+                        <span><strong>Key:</strong> Assurance</span>
+                        <span><strong>Manifestation:</strong> Respect & good thinking</span>
+                    </div>
+                </div>
+                <div class="pillar-body">
+                    <div class="pillar-description">
+                        Trust is the glue that holds our organization together—assuming good intent, communicating transparently, and building confidence in our processes and people.
+                    </div>
+                    <div class="behaviors-section">
+                        <h4>What This Looks Like in Practice:</h4>
+                        <div class="behavior-item">Assuming good intent unless proven otherwise</div>
+                        <div class="behavior-item">Stopping rumor-spreading and redirecting concerns to proper channels</div>
+                        <div class="behavior-item">Communicating transparently and consistently</div>
+                        <div class="behavior-item">Building trust in processes, not personalities</div>
+                    </div>
+                    <div class="survey-section">
+                        <h4>🪞 Your Self-Reflection</h4>
+                        <div class="question-box">
+                            <p class="question-text">"Do I give others the benefit of the doubt? How do I handle concerns—through proper channels or informal talk?"</p>
+                            <div class="rating-scale">
+                                <div class="rating-option"><input type="radio" name="p10" id="p10_1" value="1"><label for="p10_1"><span class="rating-num">1</span><span class="rating-label">Still Learning</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p10" id="p10_2" value="2"><label for="p10_2"><span class="rating-num">2</span><span class="rating-label">Growing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p10" id="p10_3" value="3"><label for="p10_3"><span class="rating-num">3</span><span class="rating-label">Developing</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p10" id="p10_4" value="4"><label for="p10_4"><span class="rating-num">4</span><span class="rating-label">Strong</span></label></div>
+                                <div class="rating-option"><input type="radio" name="p10" id="p10_5" value="5"><label for="p10_5"><span class="rating-num">5</span><span class="rating-label">Exemplary</span></label></div>
+                            </div>
+                        </div>
+                        <textarea class="reflection-textarea" name="p10_text" placeholder="Describe how you practice good faith assumptions and transparent communication..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commitment Section -->
+            <div class="commitment-section">
+                <h3>✍️ My Commitment to Active Membership</h3>
+                <p>As you prepare for Active membership, please articulate your commitment. What areas will you focus on growing? What specific goals do you have for your service?</p>
+                <textarea class="commitment-textarea" id="commitment" placeholder="As I prepare for Active membership, I commit to growing in the following areas... My specific goals include..."></textarea>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <h3>Ready to Submit?</h3>
+                <p>Review your responses and submit your reflection for the nomination process.</p>
+                <div class="submit-buttons">
+                    <button class="submit-btn secondary" onclick="downloadCSV()">Download My Responses</button>
+                    <button class="submit-btn primary" onclick="submitSurvey()">Submit for Nomination</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div class="completion-screen" id="completionScreen">
+            <div class="completion-icon">✅</div>
+            <h2>JazakAllahu Khairan!</h2>
+            <p>Your reflection has been submitted successfully. May Allah accept your efforts and guide you on this journey toward Active membership.</p>
+            <button class="submit-btn primary" onclick="downloadCSV()" style="margin-top: 20px;">Download a Copy</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Response saved!</div>
+
+    <script>
+        let nomineeData = {};
+        const responses = {};
+
+        // Set today's date as default
+        document.getElementById('sessionDate').valueAsDate = new Date();
+
+        // Track form changes
+        document.querySelectorAll('input[type="radio"], textarea').forEach(el => {
+            el.addEventListener('change', () => {
+                updateProgress();
+                showToast();
+            });
+        });
+
+        // Enable start button when required fields filled
+        const requiredFields = ['nomineeName', 'nomineeEmail', 'nomineeChapter', 'nomineeYears'];
+        requiredFields.forEach(id => {
+            document.getElementById(id).addEventListener('input', checkRegistration);
+        });
+
+        function checkRegistration() {
+            const allFilled = requiredFields.every(id => document.getElementById(id).value.trim());
+            document.getElementById('startBtn').disabled = !allFilled;
+        }
+
+        function startSurvey() {
+            nomineeData = {
+                name: document.getElementById('nomineeName').value,
+                email: document.getElementById('nomineeEmail').value,
+                chapter: document.getElementById('nomineeChapter').value,
+                role: document.getElementById('nomineeRole').value,
+                years: document.getElementById('nomineeYears').value,
+                sessionDate: document.getElementById('sessionDate').value
+            };
+
+            document.getElementById('registrationSection').style.display = 'none';
+            document.getElementById('surveyContent').classList.add('active');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= 10; i++) {
+                if (document.querySelector(`input[name="p${i}"]:checked`)) answered++;
+            }
+            const percent = Math.round((answered / 10) * 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${percent}% Complete`;
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function collectResponses() {
+            const data = { ...nomineeData };
+            
+            for (let i = 1; i <= 10; i++) {
+                const rating = document.querySelector(`input[name="p${i}"]:checked`);
+                data[`pillar${i}_rating`] = rating ? rating.value : '';
+                data[`pillar${i}_reflection`] = document.querySelector(`textarea[name="p${i}_text"]`)?.value || '';
+            }
+            
+            data.commitment = document.getElementById('commitment').value;
+            data.submittedAt = new Date().toISOString();
+            
+            return data;
+        }
+
+        function downloadCSV() {
+            const data = collectResponses();
+            
+            const pillarNames = [
+                'The Understanding', 'The Sincerity', 'The Work', 'The Jihad', 'The Sacrifice',
+                'The Obedience', 'The Steadfastness', 'The Tajarrud', 'The Brotherhood', 'The Trust'
+            ];
+
+            let csv = 'MAC Active Membership Nomination Survey\n';
+            csv += `Submitted,${data.submittedAt}\n\n`;
+            csv += 'NOMINEE INFORMATION\n';
+            csv += `Name,${data.name}\n`;
+            csv += `Email,${data.email}\n`;
+            csv += `Chapter,${data.chapter}\n`;
+            csv += `Role,${data.role}\n`;
+            csv += `Years with MAC,${data.years}\n`;
+            csv += `Session Date,${data.sessionDate}\n\n`;
+            csv += 'PILLAR ASSESSMENTS\n';
+            csv += 'Pillar,Rating (1-5),Reflection\n';
+
+            for (let i = 1; i <= 10; i++) {
+                const reflection = (data[`pillar${i}_reflection`] || '').replace(/"/g, '""').replace(/\n/g, ' ');
+                csv += `"${pillarNames[i-1]}",${data[`pillar${i}_rating`]},"${reflection}"\n`;
+            }
+
+            csv += '\nCOMMITMENT STATEMENT\n';
+            csv += `"${(data.commitment || '').replace(/"/g, '""')}"\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const safeName = data.name.replace(/[^a-zA-Z0-9]/g, '_');
+            a.download = `MAC_Nomination_${safeName}_${data.sessionDate || new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function submitSurvey() {
+            // Validate all pillars rated
+            const unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                if (!document.querySelector(`input[name="p${i}"]:checked`)) {
+                    unanswered.push(i);
+                }
+            }
+
+            if (unanswered.length > 0) {
+                alert(`Please rate all 10 pillars. Missing: Pillar(s) ${unanswered.join(', ')}`);
+                document.querySelector(`[data-pillar="${unanswered[0]}"]`).scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            if (!document.getElementById('commitment').value.trim()) {
+                alert('Please write your commitment statement before submitting.');
+                document.getElementById('commitment').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // Auto-download CSV
+            downloadCSV();
+
+            // Show completion
+            document.getElementById('surveyContent').classList.remove('active');
+            document.getElementById('completionScreen').classList.add('active');
+            
+            // Update header
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressText').textContent = 'Submitted ✓';
+        }
+    </script>
+</body>
+</html>
